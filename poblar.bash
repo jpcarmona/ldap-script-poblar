@@ -21,6 +21,17 @@ then
 	exit
 fi
 
+# Comprobamos que se especifica contraseña en parámetro $2
+
+error=$(ldapsearch -x -D "cn=admin,dc=juanpe,dc=gonzalonazareno,dc=org"/
+-b "dc=juanpe,dc=gonzalonazareno,dc=org" -w rot "cn=admin" 1>/dev/null &>1 )
+
+if [ -n "$error"]
+then
+	echo "Contraseña Incorrecta"
+	exit
+fi
+
 # Empezamos bucle para leer fichero CSV desde parámetro $1
 
 while IFS=: read nombre apellidos email usuario pubkey
