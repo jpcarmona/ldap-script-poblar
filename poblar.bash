@@ -32,7 +32,7 @@ then
 	exit
 fi
 
- Empezamos bucle para leer fichero CSV desde parámetro $1
+# Empezamos bucle para leer fichero CSV desde parámetro $1
 while IFS=: read nombre apellidos email usuario pubkey
 do
 
