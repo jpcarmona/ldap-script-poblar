@@ -8,5 +8,5 @@
 
 while IFS=: read nombre apellidos email usuario pubkey
 do
-	echo "$nombre -- $apellidos -- $email -- $usuario -- $pubkey
+	echo "$nombre -- $apellidos -- $email -- $usuario -- $pubkey"
 done < $1
