@@ -32,11 +32,30 @@ then
 	exit
 fi
 
+# Creamos variable uidnum "uidNumber"
+uidnum=2000
+
 # Empezamos bucle para leer fichero CSV desde parámetro $1
 while IFS=: read nombre apellidos email usuario pubkey
 do
 
-	echo "$nombre -- $apellidos -- $email -- $usuario -- $pubkey"
-	
+ldapadd -x -D 'cn=admin,dc=juanpe,dc=gonzalonazareno,dc=org' -w "$2" << EOF
+dn: uid=$usuario,ou=People,dc=juanpe,dc=gonzalonazareno,dc=org
+objectClass: top
+objectClass: posixAccount
+objectClass: inetOrgPerson
+objectClass: ldapPublicKey
+uid: $usuario
+uidNumber: 2000
+gidNumber: $uidnum
+homeDirectory: /home/$usuario
+cn: $nombre $apellidos
+givenName: $nombre
+sn: $apellidos
+mail: $email
+EOF
+
+uidnum=$((uidnum + 1))
+
 done < $1
 
