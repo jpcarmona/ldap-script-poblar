@@ -13,9 +13,20 @@ then
 	exit
 fi
 
+# Comprobamos que se especifica contraseña en parámetro $2
+
+if [ -z "$2"]
+then
+	echo "Por favor escriba la contraseña -admin- del directorio"
+	exit
+fi
+
 # Empezamos bucle para leer fichero CSV desde parámetro $1
 
 while IFS=: read nombre apellidos email usuario pubkey
 do
+
 	echo "$nombre -- $apellidos -- $email -- $usuario -- $pubkey"
+	
 done < $1
+
