@@ -51,10 +51,10 @@ do
 ## un aviso de los errores
 error2=$(ldapadd -x -D 'cn=admin,dc=juanpe,dc=gonzalonazareno,dc=org' -w "$2" << EOF 2>& 1>/dev/null
 dn: uid=$usuario,ou=People,dc=juanpe,dc=gonzalonazareno,dc=org
-objectClass: top
-objectClass: posixAccount
-objectClass: inetOrgPerson
 objectClass: ldapPublicKey
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: top
 uid: $usuario
 uidNumber: $uidnum
 gidNumber: 2000
