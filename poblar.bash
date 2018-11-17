@@ -39,7 +39,7 @@ uidnum=2000
 while IFS=: read nombre apellidos email usuario pubkey
 do
 
-ldapadd -x -D 'cn=admin,dc=juanpe,dc=gonzalonazareno,dc=org' -w "$2" << EOF
+error2=$(ldapadd -x -D 'cn=admin,dc=juanpe,dc=gonzalonazareno,dc=org' -w "$2" << EOF 2>& 1>/dev/null
 dn: uid=$usuario,ou=People,dc=juanpe,dc=gonzalonazareno,dc=org
 objectClass: top
 objectClass: posixAccount
@@ -54,6 +54,16 @@ givenName: $nombre
 sn: $apellidos
 mail: $email
 EOF
+)
+
+if [ -n "$error2" ]
+then
+echo "Error al insertar el usuario $usuario"
+echo "ERROR: -$error2-"
+echo ""
+fi
+
+
 
 uidnum=$((uidnum + 1))
 
