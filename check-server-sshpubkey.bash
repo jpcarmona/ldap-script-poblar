@@ -7,7 +7,7 @@
 
 
 # Obtener clave pública que nos ofrece el servidor LDAP: -------------------------
-pubkeyldap=$(ldapsearch -h 192.168.1.29 -x -o ldif-wrap=no -b "ou=Servers,dc=juanpe,dc=gonzalonazareno,dc=org" \
+pubkeyldap=$(ldapsearch -h 172.22.200.54 -x -o ldif-wrap=no -b "ou=Servers,dc=juanpe,dc=gonzalonazareno,dc=org" \
 "(|(ipHostNumber=$1)(cn=$1))" 2>/dev/null | grep sshPublicKey | cut -f2,3 -d " " )
 
 # Comprobar que se ha obtenido la clave de LDAP
@@ -29,7 +29,7 @@ pubkeyserver=$(ssh-keyscan -t $keytype $1 2>/dev/null | cut -f2- -d" " )
 # Comprobar que se ha obtenido la clave de LDAP
 if [ -z "$pubkeyserver" ]
 then
-	echo "No ha sido posible obtener la clave pública del servidor SSh $1"
+	echo "No ha sido posible obtener la clave pública del servidor SSH $1"
 	echo "Por favor compruebe que tiene conexión con el servidor SSH o si se ha resuelto bien su nombre"
 	exit
 else
@@ -48,3 +48,4 @@ else
 	echo "Las 2 claves concuerdan, verificación de claves exitosa!"
 fi
 #---------------------------------------------------------------------------------
+
