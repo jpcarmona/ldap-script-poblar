@@ -43,9 +43,10 @@ do
 ## Además redirigimos la salida del error estándar a la variable "error2" para luego realizar 
 ## un aviso de los errores
 error2=$(ldapadd -x -D 'cn=admin,dc=juanpe,dc=gonzalonazareno,dc=org' -w "$2" << EOF 2>& 1>/dev/null
-dn: cn=$nombre,ou=Servers,dc=juanpe,dc=gonzalonazareno,dc=org
-objectClass: ldapPublicKey
+dn: cn=$nombre+ipHostNumber=$iphost,ou=Servers,dc=juanpe,dc=gonzalonazareno,dc=org
 objectClass: ipHost
+objectClass: device
+objectClass: ldapPublicKey
 objectClass: top
 cn: $nombre
 ipHostNumber: $iphost
