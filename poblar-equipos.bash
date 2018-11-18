@@ -32,38 +32,23 @@ then
 fi
 
 
-# Creamos variable uidnum "uidNumber"
-uidnum=2000
-
-
 # Empezamos bucle para leer fichero CSV desde parámetro $1
 ## En IFS especificamos el delimitador de un valor en cada línea.
-## Luego se asigna cada valor a cada variable "nombre apellidos email usuario pubkey".
-## En este caso sabemos que solo hay 5 valores en cada línea, pero en caso de que hubiera más
-## se le asignaría el valor desde el 5º delimitador hasta el final de la línea a la variable 
-## "pubkey" en este caso.
+## Luego se asigna cada valor a cada variable "nombre iphost pubkey".
 ##-------------------------------- Inicio Bucle while ------------------------------------
-while IFS=: read nombre apellidos email usuario pubkey
+while IFS=: read nombre iphost pubkey
 do
 
-# Inserción de usuarios con ldapsearch
+# Inserción de equipos con ldapadd
 ## Además redirigimos la salida del error estándar a la variable "error2" para luego realizar 
 ## un aviso de los errores
 error2=$(ldapadd -x -D 'cn=admin,dc=juanpe,dc=gonzalonazareno,dc=org' -w "$2" << EOF 2>& 1>/dev/null
-dn: uid=$usuario,ou=People,dc=juanpe,dc=gonzalonazareno,dc=org
+dn: cn=$nombre,ou=Servers,dc=juanpe,dc=gonzalonazareno,dc=org
 objectClass: ldapPublicKey
-objectClass: inetOrgPerson
-objectClass: posixAccount
+objectClass: ipHost
 objectClass: top
-uid: $usuario
-uidNumber: $uidnum
-gidNumber: 2000
-homeDirectory: /home/$usuario
-loginShell: /bin/bash
-cn: $nombre $apellidos
-givenName: $nombre
-sn: $apellidos
-mail: $email
+cn: $nombre
+ipHostNumber: $iphost
 sshPublicKey: $pubkey
 EOF
 )
@@ -71,13 +56,10 @@ EOF
 # Aviso de errores
 if [ -n "$error2" ]
 then
-echo "Error al insertar el usuario $usuario"
+echo "Error al insertar el equipo $nombre"
 echo "ERROR: -$error2-"
 echo ""
 fi
-
-# Sumamos +1 a "uidnum" en cada vuelta
-uidnum=$((uidnum + 1))
 
 done < $1
 ##-------------------------------- Final Bucle while -------------------------------------
@@ -87,6 +69,6 @@ done < $1
 if [ -z "$error2" ]
 then
 echo ""
-echo "Todos los usuarios creados correctamente"
+echo "Todos los equipos creados correctamente"
 echo ""
 fi

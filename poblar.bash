@@ -46,7 +46,7 @@ uidnum=2000
 while IFS=: read nombre apellidos email usuario pubkey
 do
 
-# Inserción de usuarios con ldapsearch
+# Inserción de usuarios con ldapadd
 ## Además redirigimos la salida del error estándar a la variable "error2" para luego realizar 
 ## un aviso de los errores
 error2=$(ldapadd -x -D 'cn=admin,dc=juanpe,dc=gonzalonazareno,dc=org' -w "$2" << EOF 2>& 1>/dev/null
