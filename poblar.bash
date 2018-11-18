@@ -59,6 +59,7 @@ uid: $usuario
 uidNumber: $uidnum
 gidNumber: 2000
 homeDirectory: /home/$usuario
+loginShell: /bin/bash
 cn: $nombre $apellidos
 givenName: $nombre
 sn: $apellidos
