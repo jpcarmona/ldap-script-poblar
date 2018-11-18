@@ -1,0 +1,3 @@
+#!/bin/bash
+
+ldapsearch -x -o ldif-wrap=no -b "ou=People,dc=juanpe,dc=gonzalonazareno,dc=org" uid=$1 | grep "sshPublicKey:" | cut -f2- -d" " 
