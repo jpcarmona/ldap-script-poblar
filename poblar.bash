@@ -81,3 +81,12 @@ uidnum=$((uidnum + 1))
 
 done < $1
 ##-------------------------------- Final Bucle while -------------------------------------
+
+
+## Mostrar mensaje de todo correcto
+if [ -z "$error2" ]
+then
+echo ""
+echo "Todos los usuarios creados correctamente"
+echo ""
+fi
