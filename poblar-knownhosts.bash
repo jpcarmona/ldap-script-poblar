@@ -4,21 +4,36 @@
 #Autor: Juan pedro Carmona Romero
 #Descripción: Puebla el fichero known_hosts con claves públicas de servidores
 
-pubkeys=$(ldapsearch -h 192.168.1.24 -x -LLL -o ldif-wrap=no \
+
+# Con esto obtenemos todas las claves públicas de los servidores SSH desde LDAP. ------------
+# Con el siguiente formato:
+
+###		cn:#<nombre servidor>
+###		ipHostNumber:#<ip servidor>
+###		sshPublicKey:#<tipo de clave>#<clave pública>#<comentario equipo>
+
+pubkeys=$(ldapsearch -h $1 -x -LLL -o ldif-wrap=no \
 -b "ou=Servers,dc=juanpe,dc=gonzalonazareno,dc=org" sshPublicKey cn ipHostNumber \
 | grep -v '^dn:' | tr -t " " "#")
+
+#--------------------------------------------------------------------------------------------
+
+# Nos devuelve 3 lineas por servidor así que vamos recojiendo cada línea de la siguietne forma:
 
 for i in $pubkeys
 do
 	if [[ $i =~ .*cn:#.* ]]
 	then
-		echo "cn"
+		nombre=$(echo "$i" | cut -d "#" -f2)
+		echo "$nombre"
 	elif [[ $i =~ .*ipHostNumber:.* ]]
 	then
-		echo "ipHostNumber"
+		ipservidor=$(echo "$i" | cut -d "#" -f2)
+		echo "$ipservidor"
 	elif [[ $i =~ .*sshPublicKey:.* ]]
 	then
-		echo "sshPublicKey:"
+		pubkey=$(echo "$i" | cut -d "#" -f2,3)
+		echo "$pubkey"
 	fi
 
 done
