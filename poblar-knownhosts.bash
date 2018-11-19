@@ -25,15 +25,19 @@ do
 	if [[ $i =~ .*cn:#.* ]]
 	then
 		nombre=$(echo "$i" | cut -d "#" -f2)
-		echo "$nombre"
 	elif [[ $i =~ .*ipHostNumber:.* ]]
 	then
 		ipservidor=$(echo "$i" | cut -d "#" -f2)
-		echo "$ipservidor"
 	elif [[ $i =~ .*sshPublicKey:.* ]]
 	then
-		pubkey=$(echo "$i" | cut -d "#" -f2,3)
-		echo "$pubkey"
+		pubkey=$(echo "$i" | cut -d "#" -f2,3 | tr -t "#" " ")
+		echo "$nombre $pubkey" >> $2
+		echo "$ipservidor $pubkey" >> $2
 	fi
 
 done
+
+ssh-keygen -H -f $2
+rm $2.old
+
+#### Se podría verificar si existe ya una clave con esa ip o nombre...
