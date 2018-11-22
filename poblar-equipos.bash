@@ -1,5 +1,5 @@
 #!/bin/bash
-#Nombre del archivo: poblar.bash
+#Nombre del archivo: poblar-equipos.bash
 #Fecha de creación: 17/11/2018
 #Autor: Juan pedro Carmona Romero
 #Descripción: Poblar directorio LDAP con usuarios

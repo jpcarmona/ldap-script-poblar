@@ -1,6 +1,6 @@
 #!/bin/bash
-#Nombre del archivo: poblar-usuarios.bash
-#Fecha de creación: 17/11/2018
+#Nombre del archivo: poblar-usuarios2.bash
+#Fecha de creación: 21/11/2018
 #Autor: Juan pedro Carmona Romero
 #Descripción: Poblar directorio LDAP con usuarios
 
@@ -33,7 +33,7 @@ fi
 
 
 # Creamos variable uidnum "uidNumber"
-uidnum=2000
+uidnum=3000
 
 
 # Empezamos bucle para leer fichero CSV desde parámetro $1
@@ -43,28 +43,31 @@ uidnum=2000
 ## se le asignaría el valor desde el 5º delimitador hasta el final de la línea a la variable 
 ## "pubkey" en este caso.
 ##-------------------------------- Inicio Bucle while ------------------------------------
-while IFS=: read nombre apellidos email usuario pubkey
+while IFS=: read nombre apellidos usuario
 do
+
+#Creamos contraseña a partir del usuario (no es seguro pero es mas cómodo de crear)
+pass=$(echo $usuario | tr -d ".")
+
+#Ciframos contraseña con metodo "SSHA"
+hashpass=$(slappasswd -h {SSHA} -s $pass)
 
 # Inserción de usuarios con ldapadd
 ## Además redirigimos la salida del error estándar a la variable "error2" para luego realizar 
 ## un aviso de los errores
 error2=$(ldapadd -x -D 'cn=admin,dc=juanpe,dc=gonzalonazareno,dc=org' -w "$2" << EOF 2>& 1>/dev/null
 dn: uid=$usuario,ou=People,dc=juanpe,dc=gonzalonazareno,dc=org
-objectClass: ldapPublicKey
 objectClass: inetOrgPerson
 objectClass: posixAccount
 objectClass: top
 uid: $usuario
 uidNumber: $uidnum
-gidNumber: 2000
+gidNumber: 2001
 homeDirectory: /home/$usuario
-loginShell: /bin/bash
 cn: $nombre $apellidos
 givenName: $nombre
 sn: $apellidos
-mail: $email
-sshPublicKey: $pubkey
+userPassword: $hashpass
 EOF
 )
 
